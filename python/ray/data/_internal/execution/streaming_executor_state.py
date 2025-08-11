@@ -683,7 +683,7 @@ def select_operator_to_run(
         1. Collects all _eligible_ to run operators (check `_get_eligible_ops`
            for more details)
         2. Applies stack-ranking algorithm to select the best operator (check
-           `_create_eligible_ops_ranker` for more details)
+           `_rank_operators` for more details)
 
     """
     eligible_ops = get_eligible_operators(
