@@ -4,7 +4,8 @@ build --enable_platform_specific_config
 build --incompatible_strict_action_env
 build:strict --incompatible_strict_action_env
 
-build:linux --workspace_status_command="bash ./bazel/workspace_status.sh"
+startup --host_jvm_args="-Xmx16g"
+build --local_ram_resources=16480 --local_cpu_resources=6  --disk_cache=~/bazel-cache
 
 # To distinguish different incompatible environments.
 build --action_env=RAY_BUILD_ENV
