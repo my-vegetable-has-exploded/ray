@@ -67,6 +67,9 @@ class CheckpointConfig:
             completed rows.
         checkpoint_path_partition_filter: Filter for checkpoint files to load during
             restoration when reading from `checkpoint_path`.
+        skip_read_filter: If true, skip the automatic filter at the Read operator.
+            Use this when the ID column is added later in the pipeline (e.g., in a
+            flat_map or map operator) and doesn't exist in the source data.
     """
 
     DEFAULT_CHECKPOINT_PATH_BUCKET_ENV_VAR = "RAY_DATA_CHECKPOINT_PATH_BUCKET"
@@ -83,6 +86,7 @@ class CheckpointConfig:
         filter_num_threads: int = 3,
         write_num_threads: int = 3,
         checkpoint_path_partition_filter: Optional["PathPartitionFilter"] = None,
+        skip_read_filter: bool = False,
     ):
         self.id_column: Optional[str] = id_column
 
@@ -113,6 +117,7 @@ class CheckpointConfig:
         self.filter_num_threads: int = filter_num_threads
         self.write_num_threads: int = write_num_threads
         self.checkpoint_path_partition_filter = checkpoint_path_partition_filter
+        self.skip_read_filter: bool = skip_read_filter
 
     def _get_default_checkpoint_path(self) -> str:
         artifact_storage = os.environ.get(self.DEFAULT_CHECKPOINT_PATH_BUCKET_ENV_VAR)

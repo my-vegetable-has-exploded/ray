@@ -24,6 +24,12 @@ def plan_read_op_with_checkpoint_filter(
 ) -> PhysicalOperator:
     physical_op = plan_read_op(op, physical_children, data_context)
 
+    # Skip adding the filter if skip_read_filter is set to True.
+    # This is useful when the ID column is added later in the pipeline
+    # (e.g., in a flat_map or map operator) and doesn't exist in the source data.
+    if data_context.checkpoint_config.skip_read_filter:
+        return physical_op
+
     # TODO avoid modifying in-place
     physical_op._map_transformer.add_transform_fns(
         [
